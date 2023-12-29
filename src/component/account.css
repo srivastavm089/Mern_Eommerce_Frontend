@@ -1,0 +1,17 @@
+.profileImage {
+    transition: transform 0.5s ease-in-out; 
+    animation: jaadu 2s ease-out infinite;
+  }
+  
+  @keyframes jaadu {
+    0% {
+      transform: translateY(-10px);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+    100% {
+      transform: translateY(-10px);
+    }
+  }
+  
