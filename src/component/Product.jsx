@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ReactStars from "react-rating-stars-component";
+
 import "./product.css";
+import { Rating } from "@mui/material";
 
 const Product = ({ products }) => {
 
   const options = {
-    edit: false,
-    color: "rgba(20, 20, 20,0.1)",
-    activeColor: "red",
+    size: "large",
+    readOnly: true,
+    precision: 0.5,
     value: products.ratings,
-    size: window.innerWidth < 600 ? 20 : 15,
-    isHalf: true,
+  
   };
   return (
     <Link
@@ -46,9 +46,10 @@ const Product = ({ products }) => {
             {/* <p className="">{products.color}</p> */}
             <p className="flex items-center  gap-2">
               {" "}
-              <ReactStars
+              <Rating
+              style={{fontSize:"3vh"}}
                 {...options}
-                classNames="whitespace-nowrap mt-1 text-sm text-gray-500"
+                classNames="whitespace-nowrap  mt-1 text-gray-500"
               />{" "}
               <span className="text-sm">({products.numOfReviews}Reviews)</span>
             </p>

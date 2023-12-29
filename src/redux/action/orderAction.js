@@ -7,10 +7,13 @@ import {
   MY_ORDER_FAIL,
   MY_ORDER_REQUEST,
   MY_ORDER_SUCCESS,
+  ORDER_DETAILS_FAIL,
+  ORDER_DETAILS_REQUEST,
+  ORDER_DETAILS_SUCCESS,
 } from "../constant/order";
 
 //order create
-export const createOrder = (order) => async (dispatch, getState) => {
+export const createOrder = (order) => async (dispatch) => {
   console.log(order);
   try {
     dispatch({
@@ -38,7 +41,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
 //myOrder view
 
-export const myOrders = () => async (dispatch, getState) => {
+export const myOrders = () => async (dispatch) => {
   try {
     dispatch({
       type: MY_ORDER_REQUEST,
@@ -51,11 +54,34 @@ export const myOrders = () => async (dispatch, getState) => {
     const { data } = await axios.get("http://localhost:8080/api/v1/orders/me", {
       withCredentials: true,
     });
-   console.log(data)
+    console.log(data);
     dispatch({ type: MY_ORDER_SUCCESS, payload: data.order });
   } catch (error) {
     dispatch({
       type: MY_ORDER_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+// get Order details
+export const getOrderDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: ORDER_DETAILS_REQUEST,
+    });
+
+    const { data } = await axios.get(
+      `http://localhost:8080/api/v1/order/${id}`,
+      {
+        withCredentials: true,
+      }
+    );
+
+    dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data.order });
+  } catch (error) {
+    dispatch({
+      type: ORDER_DETAILS_FAIL,
       payload: error.response.data.message,
     });
   }

@@ -75,7 +75,7 @@ export const loadUser = () => async (dispatch) => {
     const { data } = await axios.get(`http://localhost:8080/api/v1/me`, {
       withCredentials: true,
     });
-    console.log(data);
+   
     dispatch({ type: LOAD_USER_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
@@ -113,7 +113,7 @@ export const updateUser = (userData) => async (dispatch) => {
       userData,
       config
     );
-    console.log(data);
+   
     dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({
@@ -168,7 +168,7 @@ export const forgotPassword = (email) => async (dispatch) => {
 
 //reset password
 export const resetPassword = (token, password , confirmPassword ) => async (dispatch) => {
-  console.log(token, password)
+ 
   try {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
@@ -183,7 +183,7 @@ export const resetPassword = (token, password , confirmPassword ) => async (disp
       { withCredentials: true },
       config
     );
-    console.log(data)
+
     dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({ type: RESET_PASSWORD_FAIL, payload: error.response.data.message });

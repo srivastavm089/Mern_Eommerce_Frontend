@@ -52,7 +52,7 @@ const Payment = ({ stripeApiKey }) => {
       product: item.product,
     };
   });
-  console.log(copyCart);
+  
   const order = {
     shippingInfo,
     orderItems: copyCart,

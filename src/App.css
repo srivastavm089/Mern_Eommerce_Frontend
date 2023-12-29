@@ -9,3 +9,13 @@
 .MuiStepConnector-completed {
   background-color: tomato;
 }
+
+
+.MuiDataGrid-columnHeaders{
+  background-color: tomato;
+  color: white;
+  padding: 0.2vmax !important;
+}
+.MuiDataGrid-iconSeparator{
+  display: none !important;
+}

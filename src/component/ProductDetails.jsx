@@ -2,15 +2,28 @@ import { Fragment, useEffect, useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductDetails } from "../redux/action/productAction";
+import {
+  clearErrors,
+  getProductDetails,
+  newReview,
+} from "../redux/action/productAction";
 import { useParams } from "react-router-dom";
 import ReviewCard from "./ReviewCard";
-import ReactStars from "react-rating-stars-component";
+
 import Loader from "./Loader";
 import MetaData from "./MetaData";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addItemToCart } from "../redux/action/cartAction";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from "@mui/material";
+import { Rating } from "@mui/material";
+import { NEW_REVIEW_RESET } from "../redux/constant/product";
 //   name: "Basic Tee 6-Pack",
 //   price: "$192",
 //   href: "#",
@@ -69,151 +82,246 @@ function classNames(...classes) {
 }
 
 export default function ProductDetails() {
+  const [open, setOpen] = useState(false);
+
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
   const parmas = useParams();
-const [quantity, setQuantity] = useState(1)
+  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
   const { product, loading, error } = useSelector((state) => {
     return state.productDetails;
   });
-  console.log(product)
- const  increaseQuantity = (e)=>{
-  e.preventDefault()
-  if(product.Stock <=quantity) return 
-  const qty = quantity +1;
-  setQuantity(qty)
- }
- const  decreaseQuantity = (e)=>{
-  e.preventDefault()
-  if(quantity <= 1) return 
-  const qty = quantity -1;
-  setQuantity(qty)
- }
 
+  const {
+    success,
+    loading: reviewLoading,
+    error: reviewError,
+  } = useSelector((state) => {
+    return state.newReview;
+  });
+
+  const submitReviewTogge = () => {
+    open ? setOpen(false) : setOpen(true);
+  };
+
+  const increaseQuantity = (e) => {
+    e.preventDefault();
+    if (product.Stock <= quantity) return;
+    const qty = quantity + 1;
+    setQuantity(qty);
+  };
+  const decreaseQuantity = (e) => {
+    e.preventDefault();
+    if (quantity <= 1) return;
+    const qty = quantity - 1;
+    setQuantity(qty);
+  };
 
   useEffect(() => {
+    if (error) {
+      toast.error("🦄 Wow so easy!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      dispatch(clearErrors());
+    }
+    if (reviewError) {
+      toast.error("🦄 Wow so easy!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      dispatch(clearErrors());
+    }
+
+    if (success) {
+      toast.success("Review Submitted Successfully", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      dispatch({ type: NEW_REVIEW_RESET });
+    }
     dispatch(getProductDetails(parmas.id));
-  }, []);
+  }, [dispatch, success, parmas.id, reviewError, error]);
 
- console.log(product.ratings)
-  const options ={
-    edit:false,
-    color:"rgba(20, 20, 20,0.1)",
-    activeColor:"tomato",
-    value:product.ratings,
-    size: window.innerWidth  < 600 ?    20:25,
-    isHalf:true
-    
-}
+  const options = {
+    value: product.ratings,
+    size: "large",
+    readOnly: true,
+    precision: 0.5,
+  };
 
+  const addToCartHandler = (e) => {
+    e.preventDefault();
+    dispatch(addItemToCart(parmas.id, quantity));
+    //
+    toast.success("Item added to cart", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
+  };
 
-const addToCartHandler = (e) => {
-
-
-e.preventDefault();
-dispatch(addItemToCart(parmas.id, quantity))
-// 
-toast.success("Item added to cart", {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: "light",
-});
-}
-  return <Fragment>
-   {
-    product.name ?    <div className="bg-white">  
-
-<MetaData title={`${product.name} -- ECOMMERCE`} />
-<ToastContainer />
-      <div className="pt-6">
-        <nav aria-label="Breadcrumb">
-          <ol
-            role="list"
-            className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
-          >
-            <li className="text-sm">
-              <a
-                href={product.href}
-                aria-current="page"
-                className="font-medium text-gray-500 hover:text-gray-600"
+  const reviewSubmitHandler = () => {
+    const reviewData = {
+      rating,
+      comment,
+      productId: parmas.id,
+    };
+    dispatch(newReview(reviewData));
+    setOpen(false);
+  };
+  return (
+    <Fragment>
+      {product.name ? (
+        <div className="bg-white">
+          <MetaData title={`${product.name} -- ECOMMERCE`} />
+          <ToastContainer />
+          <div className="pt-6">
+            <nav aria-label="Breadcrumb">
+              <ol
+                role="list"
+                className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8"
               >
-                {"home/t-shirt"}
-              </a>
-            </li>
-          </ol>
-        </nav>
+                <li className="text-sm">
+                  <a
+                    href={product.href}
+                    aria-current="page"
+                    className="font-medium text-gray-500 hover:text-gray-600"
+                  >
+                    {"home/t-shirt"}
+                  </a>
+                </li>
+              </ol>
+            </nav>
 
-        {/* Image gallery */}
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
-          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-            <img
-              src={product.images[0].url}
-              alt="uui"
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
-          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-              <img
-                src={product.images[0].url}
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-              <img
-                src={product.images[0].url}
-                className="h-full w-full object-cover object-center"
-              />
-            </div>
-          </div>
-          <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-            <img
-              src={product.images[0].url}
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
-        </div>
-
-        {/* Product info */}
-        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
-          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-              {product.name}
-            </h1>
-          </div>
-
-          {/* Options */}
-          <div className="mt-4 lg:row-span-3 lg:mt-0">
-            <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">
-              ₹{product.price}
-            </p>
-
-            {/* Reviews */}
-            <div className="mt-6">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                <div className="flex items-center">
-                <ReactStars {...options}/>
+            {/* Image gallery */}
+            <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+              <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+                <img
+                  src={product.images[0].url}
+                  alt="uui"
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
+              <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                  <img
+                    src={product.images[0].url}
+                    className="h-full w-full object-cover object-center"
+                  />
                 </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {product.
-numOfReviews} reviews
-                </a>
+                <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+                  <img
+                    src={product.images[0].url}
+                    className="h-full w-full object-cover object-center"
+                  />
+                </div>
+              </div>
+              <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+                <img
+                  src={product.images[0].url}
+                  className="h-full w-full object-cover object-center"
+                />
               </div>
             </div>
 
-            <form className="mt-10">
-              {/* Colors */}
-              {/* <div>
+            {/* Product info */}
+            <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+              <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                  {product.name}
+                </h1>
+              </div>
+
+              {/* Options */}
+              <div className="mt-4 lg:row-span-3 lg:mt-0">
+                <h2 className="sr-only">Product information</h2>
+                <p className="text-3xl tracking-tight text-gray-900">
+                  ₹{product.price}
+                </p>
+
+                {/* Reviews */}
+                <div className="mt-6 flex flex-col gap-3">
+                  <h3 className="sr-only">Reviews</h3>
+                  <div className="flex items-center">
+                    <div className="flex items-center">
+                      <Rating {...options} />
+                    </div>
+                    <p className="sr-only">{reviews.average} out of 5 stars</p>
+                    <a
+                      href={reviews.href}
+                      className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      {product.numOfReviews} reviews
+                    </a>
+                  </div>
+                  <button
+                    className="bg-[tomato] text-white p-2 rounded-full"
+                    onClick={submitReviewTogge}
+                  >
+                    Submit Review
+                  </button>
+                </div>
+                <Dialog
+                  arial-aria-labelledby="simple-dialog-title"
+                  open={open}
+                  onClose={submitReviewTogge}
+                >
+                  <DialogTitle>Submit Review</DialogTitle>
+                  <DialogContent className="flex flex-col">
+                    <Rating
+                      onChange={(e) => setRating(e.target.value)}
+                      value={rating}
+                      size="large"
+                    />
+                    <textarea
+                      name=""
+                      id=""
+                      cols="30"
+                      rows="10"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button color="secondary" onClick={submitReviewTogge}>
+                      {" "}
+                      Cancel
+                    </Button>
+                    <Button color="primary" onClick={reviewSubmitHandler}>
+                      Submit
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+                <form className="mt-10">
+                  {/* Colors */}
+                  {/* <div>
             <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
             <RadioGroup
@@ -254,24 +362,38 @@ numOfReviews} reviews
             </RadioGroup>
           </div> */}
 
-              {/* Sizes */}
-              <div className="mt-10 flex flex-col items-center gap-1">
-                <div className="flex items-center justify-center gap-2 box-border">
-                  <button className="border p-2 w-10" onClick={decreaseQuantity}>-</button>
-                  <input
-                    type="Number "
-                    className="w-5 text-center border w-8 h-8"
-                    value={quantity}
-                    readOnly
-                  />
+                  {/* Sizes */}
+                  <div className="mt-10 flex flex-col items-center gap-1">
+                    <div className="flex items-center justify-center gap-2 box-border">
+                      <button
+                        className="border p-2 w-10"
+                        onClick={decreaseQuantity}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="Number "
+                        className="w-5 text-center border w-8 h-8"
+                        value={quantity}
+                        readOnly
+                      />
 
-                  <button className="border p-2 w-10" onClick={increaseQuantity}>+</button>
-                </div>
-                <div>
-               { product.Stock>0?  <span className="text-green-500">InStock</span>: <span className="text-red-500">Out Of Stock</span>}
-                </div>
+                      <button
+                        className="border p-2 w-10"
+                        onClick={increaseQuantity}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div>
+                      {product.Stock > 0 ? (
+                        <span className="text-green-500">InStock</span>
+                      ) : (
+                        <span className="text-red-500">Out Of Stock</span>
+                      )}
+                    </div>
 
-                {/* <RadioGroup
+                    {/* <RadioGroup
               value={selectedSize}
               onChange={setSelectedSize}
               className="mt-4"
@@ -338,80 +460,82 @@ numOfReviews} reviews
                 ))}
               </div>
             </RadioGroup>  */}
+                  </div>
+
+                  <button
+                    disabled={product.Stock < 1 ? true : false}
+                    className="mt-10 flex w-full items-center  justify-center rounded-full  border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    onClick={addToCartHandler}
+                  >
+                    Add to bag
+                  </button>
+                </form>
               </div>
 
-              <button
-            
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                onClick={addToCartHandler}
-              >
-                Add to bag
-              </button>
-            </form>
-          </div>
+              <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+                {/* Description and details */}
+                <div>
+                  <h3 className="sr-only">Description</h3>
 
-          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-            {/* Description and details */}
-            <div>
-              <h3 className="sr-only">Description</h3>
+                  <div className="space-y-6">
+                    <p className="text-base text-gray-900">
+                      {product.description}
+                    </p>
+                  </div>
+                </div>
 
-              <div className="space-y-6">
-                <p className="text-base text-gray-900">
-                  {product.description}
-                </p>
-              </div>
-            </div>
+                <div className="mt-10">
+                  <h3 className="text-sm font-medium text-gray-900">
+                    Highlights
+                  </h3>
 
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">
-                Highlights
-              </h3>
-
-              <div className="mt-4">
-                {/* <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                  <div className="mt-4">
+                    {/* <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
               {product.highlights.map((highlight) => (
                 <li key={highlight} className="text-gray-400">
                   <span className="text-gray-600">{highlight}</span>
                 </li>
               ))}
             </ul> */}
-              </div>
-            </div>
+                  </div>
+                </div>
 
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                <div className="mt-10">
+                  <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
-              <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.details}</p>
+                  <div className="mt-4 space-y-6">
+                    <p className="text-sm text-gray-600">{product.details}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-  
-    <div>
-        <div className="flex justify-center">
-            <h1 className="border-b-2 border-b-red-300 w-40 text-center text-4xl pb-2">REVIEW</h1>
-        </div>
-        <div >   
-            
+
+          <div>
+            <div className="flex justify-center">
+              <h1 className="border-b-2 border-b-red-300 w-40 text-center text-4xl pb-2">
+                REVIEW
+              </h1>
+            </div>
+            <div>
               {product.reviews && product.reviews[0] ? (
-        <div className="mt-12">
-          {product.reviews &&
-            product.reviews.map((review) => {
-              return <ReviewCard  review={review} key={review._id} />;
-            })}
+                <div className="mt-12">
+                  {product.reviews &&
+                    product.reviews.map((review) => {
+                      return <ReviewCard review={review} key={review._id} />;
+                    })}
+                </div>
+              ) : (
+                <p className="text-center mt-12 text-5xl mb-12">
+                  No Review Yet
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       ) : (
-        <p className="text-center mt-12 text-5xl mb-12">No Review Yet</p>
+        <Loader />
       )}
-      </div>
- 
-    </div>
-  </div>:<Loader/>
-   }
-
-
-
-  </Fragment>;
+    </Fragment>
+  );
 }

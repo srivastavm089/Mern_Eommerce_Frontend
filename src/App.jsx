@@ -38,6 +38,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Success from "./component/Success";
+import OrderOverView from "./component/OrderOverView";
 
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
@@ -76,6 +77,7 @@ const App = () => {
         <Route path="/login/shipping" element={<Shipping />} />
         <Route path="/order/confirm" element={<ConfirmOrder />} />
         <Route path="/success" element={<Success/>}/>
+        <Route path="/orders/:id" element={<OrderOverView/>}/>
       </Routes>
 
       {stripeApiKey && (

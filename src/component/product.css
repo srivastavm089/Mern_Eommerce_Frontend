@@ -1,5 +1,5 @@
 #product-card{
-transition: all 0.1s;
+transition: all 0.5s;
 }
 #product-card:hover{
   transform: translateY(-8px);

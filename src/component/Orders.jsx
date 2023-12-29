@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 const Orders = () => {
   const { user } = useSelector((state) => state.user);
   const { loading, error, orders } = useSelector((state) => state.myOrder);
-
+console.log(orders)
   const dispatch = useDispatch();
   useEffect(() => {
     if (error) {
@@ -37,7 +37,16 @@ const Orders = () => {
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 300, flex: 1 },
-    { field: "status", headerName: "Status", minWidth: 150, flex: 0.5 },
+    {
+      field: "status",
+      headerName: "Status",
+      minWidth: 150,
+      flex: 0.5,
+      cellClassName: (params) => {
+       
+       return params.value ==="Delivered" ?   "text-green-500":"text-red-500"
+      },
+    },
     {
       field: "itemQty",
       headerName: "Item Quantity",
@@ -61,7 +70,7 @@ const Orders = () => {
       sortable: false,
       renderCell: (params) => {
         return (
-          <Link to={`/orders/${params.id}`}>
+          <Link to={`/orders/${params.id}`} className="hover:text-red-400">
             <LaunchIcon />
           </Link>
         );
@@ -87,7 +96,7 @@ const Orders = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div>
+        <div className="max-w-screen-2xl box-border sm:pl-[7vmax] sm:pr-[7vmax] flex flex-col h-screen">
           <DataGrid
             rows={rows}
             columns={columns}
@@ -95,7 +104,7 @@ const Orders = () => {
             disableSelectionOnClick
             autoHeight
           />
-          <Typography>{user && user.user && user.name}'s Orders</Typography>
+          <Typography className=" bg-slate-500 text-white h-12 flex justify-center items-center">{user && user.user && user.user.name}'s Orders</Typography>
         </div>
       )}
     </Fragment>
