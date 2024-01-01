@@ -52,7 +52,7 @@ export default function Example() {
   }
 
   function dashboard() {
-    navigate("/dashboard");
+    navigate("/admin/dashboard");
   }
   function account() {
     navigate("/account");
@@ -98,11 +98,11 @@ export default function Example() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
+                  {/* <img
                     className="h-8 w-auto"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROPlT2D79QNCofIkWZ3Uyp7bNT0kB7F4riVA&usqp=CAU"
                     alt="Your Company"
-                  />
+                  /> */}
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

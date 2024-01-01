@@ -1,32 +1,4 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Header from "./component/Header";
-import Footer from "./component/Footer";
-
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Home from "./component/Home";
-import "./App.css";
-import Loader from "./component/Loader";
-import ProductDetails from "./component/ProductDetails";
-import Products from "./component/Products";
-import Search from "./component/Search";
-import SearchProduct from "./component/SearchProduct";
-import Login from "./component/user/Login";
-import Register from "./component/user/Register";
-import Cart from "./component/Cart";
-import store from "../src/redux/store";
-import { loadUser } from "./redux/action/userAction";
-import Account from "./component/Account";
-import EditProfile from "./component/EditProfile";
-import Orders from "./component/Orders";
-import Contact from "./component/Contact";
-import About from "./component/About";
-import UpdatePassword from "./component/UpdatePassword";
-import ForgotPassword from "./component/ForgotPassword";
-import ResetPassword from "./component/ResetPassword";
-import Shipping from "./component/Shipping";
-import ConfirmOrder from "./component/ConfirmOrder";
-import Payment from "./component/Payment";
-
 import axios from "axios";
 import {
   CardNumberElement,
@@ -37,18 +9,64 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import Success from "./component/Success";
-import OrderOverView from "./component/OrderOverView";
+import { lazy , Suspense } from "react";
 
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import "./App.css";
+
+import store from "../src/redux/store";
+import { loadUser } from "./redux/action/userAction";
+import AdminOrders from "./component/AdminOrders";
+
+const Footer = lazy(() => import("./component/Footer"));
+const Home = lazy(() => import("./component/Home"));
+const ProductDetails = lazy(() => import("./component/ProductDetails"));
+const Loader = lazy(() => import("./component/Loader"));
+const Products = lazy(() => import("./component/Products"));
+const Search = lazy(() => import("./component/Search"));
+const SearchProduct = lazy(() => import("./component/SearchProduct"));
+const Login = lazy(() => import("./component/user/Register"));
+const Register = lazy(() => import("./component/user/Register"));
+const Cart = lazy(() => import("./component/Cart"));
+const Account = lazy(() => import("./component/Account"));
+const EditProfile = lazy(() => import("./component/EditProfile"));
+const Orders = lazy(() => import("./component/Orders"));
+const Contact = lazy(() => import("./component/Contact"));
+const About = lazy(() => import("./component/About"));
+const UpdatePassword = lazy(() => import("./component/UpdatePassword"));
+const ForgotPassword = lazy(() => import("./component/ForgotPassword"));
+const ResetPassword = lazy(() => import("./component/ResetPassword"));
+const Shipping = lazy(() => import("./component/Shipping"));
+const ConfirmOrder = lazy(() => import("./component/ConfirmOrder"));
+const Payment = lazy(() => import("./component/Payment"));
+const Success = lazy(() => import("./component/Success"));
+const OrderOverView = lazy(() => import("./component/OrderOverView"));
+const AdminDashboard = lazy(() => import("./component/AdminDashboard"));
+const Header = lazy(() => import("./component/Header"));
+const NewProduct = lazy(() => import("./component/NewProduct"));
+const AdminProductEdit = lazy(() => import("./component/AdminProductEdit"));
+const ProductList = lazy(() => import("./component/ProductList"));
 const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
   async function getStripeApiKey() {
-    const { data } = await axios.get(
-      "http://localhost:8080/api/v1/stripeapikey",
-      { withCredentials: true }
-    );
-    setStripeApiKey(data.stripeApiKey);
+    try {
+
+      const { data } = await axios.get(
+        "http://localhost:8080/api/v1/stripeapikey",
+        { withCredentials: true }
+      );
+
+      // Assuming data.stripeApiKey is the key you want to set
+      setStripeApiKey(data.stripeApiKey);
+
+      // You can do something else with the API key here, depending on your requirements
+    } catch (error) {
+      // Handle the error
+      console.error("Error fetching Stripe API key:", error);
+    }
   }
+
   useEffect(() => {
     getStripeApiKey();
     store.dispatch(loadUser());
@@ -58,6 +76,7 @@ const App = () => {
       <Header />
 
       <Routes>
+        
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
@@ -76,8 +95,13 @@ const App = () => {
         <Route path="/password/reset/:token" element={<ResetPassword />} />
         <Route path="/login/shipping" element={<Shipping />} />
         <Route path="/order/confirm" element={<ConfirmOrder />} />
-        <Route path="/success" element={<Success/>}/>
-        <Route path="/orders/:id" element={<OrderOverView/>}/>
+        <Route path="/success" element={<Success />} />
+        <Route path="/orders/:id" element={<OrderOverView />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/products" element={<ProductList />} />
+        <Route path="/admin/newProduct" element={<NewProduct />} />
+        <Route path="/admin/product/:id" element={<AdminProductEdit />} />
+        <Route path="/admin/orders" element={<AdminOrders/>}/>
       </Routes>
 
       {stripeApiKey && (

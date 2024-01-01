@@ -1,13 +1,15 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { thunk } from "redux-thunk";
 import {
+  deleteProduct,
+  newProductReducer,
   newReviewReducer,
   productDetailsReducer,
   productReducer,
 } from "./reducer/productReducer";
 import { forgetPasswordReducer, userReducer } from "./reducer/userReducer";
 import { cartReducer } from "./reducer/cartReducer";
-import { myOrderReducer, newOrderReducer, orderDetails } from "./reducer/orderReducer";
+import { allOrderReducer, myOrderReducer, newOrderReducer, orderDetails, orderReducer } from "./reducer/orderReducer";
 
 const reducers = {
   products: productReducer,
@@ -19,7 +21,11 @@ const reducers = {
   cart: cartReducer,
   order:newOrderReducer,
   myOrder:myOrderReducer,
-  myOrderDetails:orderDetails
+  myOrderDetails:orderDetails,
+  newProduct:newProductReducer,
+  product:deleteProduct,
+  allOrder:allOrderReducer,
+  orders:orderReducer
 };
 
 const store = configureStore({

@@ -14,9 +14,27 @@ input[type="number"] {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.fileUpload::-webkit-file-upload-button{
+  width: 100%;
+  padding: 0.5em 0 0.5em 0;
+  background-color: white;
+  border: 1px solid gray;
 
-
-
+}
+.hideOverflow::-webkit-scrollbar{
+  scroll-behavior: smooth;
+  display: none;
+  
+}
+#create-admin-btn{
+  background-color: tomato ;
+  color: white
+  
+}
+#create-admin-btn:hover{
+  transition: all 0.4s;
+  background-color: gray;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
