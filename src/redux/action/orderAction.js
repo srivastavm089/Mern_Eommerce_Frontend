@@ -63,6 +63,7 @@ export const getAllOrder = () => async (dispatch) => {
 
 //update order
 export const updateOrder = (id, order) => async (dispatch) => {
+  console.log("runnning")
   try {
     dispatch({ type: UPDATE_ORDER_REQUEST });
     const config = {
@@ -74,7 +75,7 @@ export const updateOrder = (id, order) => async (dispatch) => {
       order,
       config
     );
-
+   console.log(data)
     dispatch({ type: UPDATE_ORDER_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({ type: UPDATE_ORDER_FAIL, payload: error.response.data.message });

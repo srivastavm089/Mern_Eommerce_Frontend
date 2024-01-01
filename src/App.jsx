@@ -9,7 +9,7 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { lazy , Suspense } from "react";
+import { lazy, Suspense } from "react";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -17,8 +17,9 @@ import "./App.css";
 
 import store from "../src/redux/store";
 import { loadUser } from "./redux/action/userAction";
-import AdminOrders from "./component/AdminOrders";
+import ProcessOrder from "./component/ProcessOrder";
 
+const AdminOrders = lazy(() => import("./component/AdminOrders"));
 const Footer = lazy(() => import("./component/Footer"));
 const Home = lazy(() => import("./component/Home"));
 const ProductDetails = lazy(() => import("./component/ProductDetails"));
@@ -51,7 +52,6 @@ const App = () => {
   const [stripeApiKey, setStripeApiKey] = useState("");
   async function getStripeApiKey() {
     try {
-
       const { data } = await axios.get(
         "http://localhost:8080/api/v1/stripeapikey",
         { withCredentials: true }
@@ -76,7 +76,6 @@ const App = () => {
       <Header />
 
       <Routes>
-        
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
@@ -101,7 +100,8 @@ const App = () => {
         <Route path="/admin/products" element={<ProductList />} />
         <Route path="/admin/newProduct" element={<NewProduct />} />
         <Route path="/admin/product/:id" element={<AdminProductEdit />} />
-        <Route path="/admin/orders" element={<AdminOrders/>}/>
+        <Route path="/admin/orders" element={<AdminOrders />} />
+        <Route path="/admin/order/:id" element={<ProcessOrder/>}/>
       </Routes>
 
       {stripeApiKey && (
