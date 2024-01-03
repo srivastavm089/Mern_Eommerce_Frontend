@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const ConfirmOrder = () => {
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
-
+ console.log(cartItems)
   const subTotal = cartItems.reduce(
     (acc, initial) => acc + initial.price * initial.quantity,
     0
@@ -83,24 +83,24 @@ const ConfirmOrder = () => {
           </div>
           <div className="flex justify-between">
             {" "}
-            <p>Shipping Charges</p> <p> ₹ 0</p>
+            <p>Shipping Charges</p> <p> ₹0</p>
           </div>
           <div className="flex justify-between border-b-2 pb-5">
-            <p>GST</p>{" "}
+            <p>GST</p>
             <p>
-              {(cartItems.reduce(
+            ₹{Math.round((cartItems.reduce(
                 (acc, initial) => acc + initial.price * initial.quantity,
                 0
               ) *
                 18) /
-                100}
+                100)}
             </p>
           </div>
           <div className="flex justify-between">
             <p>Total: </p>{" "}
             <p>
-              ₹{" "}
-              {(cartItems.reduce(
+              ₹
+              {Math.round((cartItems.reduce(
                 (acc, initial) => acc + initial.price * initial.quantity,
                 0
               ) *
@@ -109,7 +109,7 @@ const ConfirmOrder = () => {
                 cartItems.reduce(
                   (acc, initial) => acc + initial.price * initial.quantity,
                   0
-                )}
+                ))}
             </p>
           </div>
           <div>

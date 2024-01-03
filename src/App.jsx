@@ -18,6 +18,10 @@ import "./App.css";
 import store from "../src/redux/store";
 import { loadUser } from "./redux/action/userAction";
 import ProcessOrder from "./component/ProcessOrder";
+import AdminAllUser from "./component/AdminAllUser";
+import AdminUser from "./component/AdminUser";
+import ProductReviews from "./component/ProductReviews";
+import NotFound from "./component/NotFound";
 
 const AdminOrders = lazy(() => import("./component/AdminOrders"));
 const Footer = lazy(() => import("./component/Footer"));
@@ -27,7 +31,7 @@ const Loader = lazy(() => import("./component/Loader"));
 const Products = lazy(() => import("./component/Products"));
 const Search = lazy(() => import("./component/Search"));
 const SearchProduct = lazy(() => import("./component/SearchProduct"));
-const Login = lazy(() => import("./component/user/Register"));
+const Login = lazy(() => import("./component/user/Login"));
 const Register = lazy(() => import("./component/user/Register"));
 const Cart = lazy(() => import("./component/Cart"));
 const Account = lazy(() => import("./component/Account"));
@@ -81,7 +85,7 @@ const App = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/searchProduct/:keyword" element={<SearchProduct />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<Account />} />
@@ -92,7 +96,7 @@ const App = () => {
         <Route path="/account/update_password" element={<UpdatePassword />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
-        <Route path="/login/shipping" element={<Shipping />} />
+        <Route path="/shipping" element={<Shipping />} />
         <Route path="/order/confirm" element={<ConfirmOrder />} />
         <Route path="/success" element={<Success />} />
         <Route path="/orders/:id" element={<OrderOverView />} />
@@ -102,6 +106,10 @@ const App = () => {
         <Route path="/admin/product/:id" element={<AdminProductEdit />} />
         <Route path="/admin/orders" element={<AdminOrders />} />
         <Route path="/admin/order/:id" element={<ProcessOrder/>}/>
+        <Route path="/admin/users" element={<AdminAllUser/>}/>
+        <Route path="/admin/user/:id" element={<AdminUser/>}/>
+        <Route path="/admin/reviews" element={<ProductReviews/>}/>
+        <Route path="/*" element={<NotFound/>}/>
       </Routes>
 
       {stripeApiKey && (

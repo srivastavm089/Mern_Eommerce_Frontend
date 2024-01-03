@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import {useLocation} from "react-router-dom"
 import "./account.css"
 import Loader from "./Loader";
 import { loadUser } from "../redux/action/userAction";
@@ -10,7 +11,8 @@ const Account = () => {
   const { error, loading, isAuthenticated , user } = useSelector(
     (state) => state.user
   );
-  
+  const checkHistory = useLocation();
+  console.log(checkHistory)
 
   useEffect(() => {
    

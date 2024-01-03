@@ -22,6 +22,12 @@ import {
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
+  ALL_REVIEW_REQUEST,
+  ALL_REVIEW_SUCCESS,
+  ALL_REVIEW_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_SUCCESS,
+  DELETE_REVIEW_FAIL,
 } from "../constant/product";
 
 //get products
@@ -199,7 +205,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
       productData,
       config
     );
-    console.log(data.success)
+    console.log(data.success);
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,
 
@@ -214,6 +220,65 @@ export const updateProduct = (id, productData) => async (dispatch) => {
   }
 };
 //clearing errors
+
+//get all reviews of a product
+export const getAllReviews = (reviewId, productId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: ALL_REVIEW_REQUEST,
+    });
+    const config = {
+      // headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    };
+    const { data } = await axios.get(
+      `http://localhost:8080/api/v1/reviews?id=${reviewId}`,
+
+      config
+    );
+    console.log(data);
+    dispatch({
+      type: ALL_REVIEW_SUCCESS,
+
+      payload: data.reviews,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: ALL_REVIEW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const deleteReviews = (reviewId, productId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DELETE_REVIEW_REQUEST,
+    });
+    const config = {
+      // headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    };
+    const { data } = await axios.delete(
+      `http://localhost:8080/api/v1/reviews?id=${reviewId}&productId=${productId}`,
+
+      config
+    );
+    console.log(data.success);
+    dispatch({
+      type: DELETE_REVIEW_SUCCESS,
+
+      payload: data.success,
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({
+      type: DELETE_REVIEW_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
 export const clearErrors = () => async (dispatch) => {
   dispatch({
     type: CLEAR_ERROR,

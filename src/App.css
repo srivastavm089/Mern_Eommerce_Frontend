@@ -10,7 +10,11 @@
   background-color: tomato;
 }
 
-
+body{
+  cursor: url("https://icon2.cleanpng.com/20171220/kdw/mouse-cursor-png-5a3aa6186d5ed7.320951801513793048448.jpg");
+  height: 100%;
+  
+}
 .MuiDataGrid-columnHeaders{
   background-color: tomato;
   color: white;

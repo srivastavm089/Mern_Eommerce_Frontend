@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductAdmin, clearErrors } from "../redux/action/productAction";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getAllOrder } from "../redux/action/orderAction";
+import { getUsers } from "../redux/action/userAction";
 // const labels = Utils.months({count: 7});
 // const data = {
 //   labels: labels,
@@ -22,6 +24,10 @@ import "react-toastify/dist/ReactToastify.css";
 const AdminDashboard = () => {
 
   const { error, products } = useSelector((state) => state.products);
+ 
+  const { orders } = useSelector((state) => state.allOrder);
+  const { user } = useSelector((state) => state.user);
+  const { users } = useSelector((state) => state.users);
   const dispatch = useDispatch();
   useEffect(() => {
     if (error) {
@@ -38,6 +44,8 @@ const AdminDashboard = () => {
       dispatch(clearErrors());
     }
     dispatch(getProductAdmin());
+    dispatch(getAllOrder())
+    dispatch(getUsers())
   }, [dispatch, error]);
   let outOfStock = 0; 
   products && products.forEach((item)=>{
@@ -74,14 +82,14 @@ const AdminDashboard = () => {
               className="flex flex-col items-center justify-center h-20 w-20  lg:w-36 lg:h-36 lg:p-20 text-white  bg-gray-500 rounded-full"
             >
               <p>Orders</p>
-              <p>4</p>
+              <p>{orders && orders.length}</p>
             </Link>
             <Link
               to="/admin/users"
               className="flex flex-col items-center justify-center w-20 h-20 lg:w-36 lg:h-36  lg:p-20 text-white  bg-orange-500 rounded-full"
             >
               <p>Users</p>
-              <p>2</p>
+              <p>{users && users.length}</p>
             </Link>
           </div>
         </div>

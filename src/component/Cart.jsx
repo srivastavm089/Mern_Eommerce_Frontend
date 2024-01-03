@@ -26,7 +26,8 @@ export default function Cart() {
   };
 
   const  checkOutHandler = ()=> {
-    navigate("/login?redirect=shipping")
+ 
+    navigate("/shipping")
   }
   return <Fragment>{
     cartItems.length ===0 ?   <div className="h-screen flex justify-center  items-center">

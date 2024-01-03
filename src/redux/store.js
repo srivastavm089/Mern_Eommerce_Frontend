@@ -6,8 +6,10 @@ import {
   newReviewReducer,
   productDetailsReducer,
   productReducer,
+  productReviewsReducer,
+  reviewReducer,
 } from "./reducer/productReducer";
-import { forgetPasswordReducer, userReducer } from "./reducer/userReducer";
+import { forgetPasswordReducer, getAllUser, userDetailRequest, userReducer } from "./reducer/userReducer";
 import { cartReducer } from "./reducer/cartReducer";
 import { allOrderReducer, myOrderReducer, newOrderReducer, orderDetails, orderReducer } from "./reducer/orderReducer";
 
@@ -25,7 +27,11 @@ const reducers = {
   newProduct:newProductReducer,
   product:deleteProduct,
   allOrder:allOrderReducer,
-  orders:orderReducer
+  orders:orderReducer,
+  users:getAllUser,
+  userDetail:userDetailRequest,
+  productReviews:productReviewsReducer,
+  review:reviewReducer
 };
 
 const store = configureStore({
