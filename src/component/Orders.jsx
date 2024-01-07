@@ -19,7 +19,7 @@ console.log(orders)
   const dispatch = useDispatch();
   useEffect(() => {
     if (error) {
-      toast.error("🦄 Wow so easy!", {
+      return toast.error("login to acces this page ", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -29,7 +29,7 @@ console.log(orders)
         progress: undefined,
         theme: "light",
       });
-      dispatch(clearErrors());
+      // dispatch(clearErrors());
     }
 
     dispatch(myOrders());

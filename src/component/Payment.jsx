@@ -89,7 +89,7 @@ const Payment = ({ stripeApiKey }) => {
       const { data } = await axios.post(
         "http://localhost:8080/api/v1/payment/process",
         paymentData,
-        config
+        {headers:{"Content-Type":"application/json", "token":localStorage.getItem("token")}}
       );
 
       const client_secret = data.client_secret;

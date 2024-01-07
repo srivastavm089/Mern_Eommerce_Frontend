@@ -6,6 +6,7 @@ import { CiShoppingCart, CiUser } from "react-icons/ci";
 import { CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser, logout } from "../redux/action/userAction";
+
 import LoginIcon from "@mui/icons-material/Login";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import PersonIcon from "@mui/icons-material/Person";
@@ -33,6 +34,7 @@ export default function Example() {
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const options = [
     { icon: <ListAltIcon />, name: "Orders", func: orders },
     { icon: <PersonIcon />, name: "Profile", func: account },
@@ -58,10 +60,13 @@ export default function Example() {
     navigate("/account");
   }
   function logoutUser() {
-    dispatch(logout());
+    localStorage.removeItem("token");
+
+
+
     toast.success("logged out", {
       position: "top-right",
-      autoClose: 5000,
+      autoClose: 1000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -69,6 +74,9 @@ export default function Example() {
       progress: undefined,
       theme: "light",
     });
+
+
+    window.location.reload();
   }
   function orders() {
     navigate("/orders");
@@ -178,7 +186,7 @@ export default function Example() {
                     leaveTo="transform opacity-0 scale-95"
                   >
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {options.map((item , index) => {
+                      {options.map((item, index) => {
                         return (
                           <Menu.Item key={index}>
                             <div

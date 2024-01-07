@@ -22,6 +22,7 @@ import AdminAllUser from "./component/AdminAllUser";
 import AdminUser from "./component/AdminUser";
 import ProductReviews from "./component/ProductReviews";
 import NotFound from "./component/NotFound";
+import ProtectedRoute from "./component/ProtectedRoute";
 
 const AdminOrders = lazy(() => import("./component/AdminOrders"));
 const Footer = lazy(() => import("./component/Footer"));
@@ -58,8 +59,8 @@ const App = () => {
     try {
       const { data } = await axios.get(
         "https://testing-api-i7lh.onrender.com/api/v1/stripeapikey",
-        {headers:{"Content-Type":'application/json', token:localStorage.getItem("token")}}
-        // { withCredentials: true }
+        {headers:{"Content-Type":'application/json', "token":localStorage.getItem("token")}}
+       
       );
 
       // Assuming data.stripeApiKey is the key you want to set
@@ -81,6 +82,7 @@ const App = () => {
       <Header />
 
       <Routes>
+
         <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
@@ -88,28 +90,28 @@ const App = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/account/update/me" element={<EditProfile />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/account/update_password" element={<UpdatePassword />} />
+        <Route path="/cart" element={<ProtectedRoute  Comp={Cart}/>} />
+        <Route path="/account" element={<ProtectedRoute Comp={Account} />} />
+        <Route path="/account/update/me" element={<ProtectedRoute Comp={EditProfile} />} />
+        <Route path="/orders" element={<ProtectedRoute Comp={Orders}/>} />
+        <Route path="/contact" element={<ProtectedRoute Comp={Contact}/>} />
+        <Route path="/about" element={<ProtectedRoute Comp={About} />} />
+        <Route path="/account/update_password" element={<ProtectedRoute Comp={UpdatePassword} />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:token" element={<ResetPassword />} />
-        <Route path="/shipping" element={<Shipping />} />
-        <Route path="/order/confirm" element={<ConfirmOrder />} />
-        <Route path="/success" element={<Success />} />
-        <Route path="/orders/:id" element={<OrderOverView />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/products" element={<ProductList />} />
-        <Route path="/admin/newProduct" element={<NewProduct />} />
-        <Route path="/admin/product/:id" element={<AdminProductEdit />} />
-        <Route path="/admin/orders" element={<AdminOrders />} />
-        <Route path="/admin/order/:id" element={<ProcessOrder/>}/>
-        <Route path="/admin/users" element={<AdminAllUser/>}/>
-        <Route path="/admin/user/:id" element={<AdminUser/>}/>
-        <Route path="/admin/reviews" element={<ProductReviews/>}/>
+        <Route path="/shipping" element={<ProtectedRoute Comp={Shipping} />} />
+        <Route path="/order/confirm" element={<ProtectedRoute Comp={ConfirmOrder} />} />
+        <Route path="/success" element={<ProtectedRoute Comp={Success}  />} />
+        <Route path="/orders/:id" element={<ProtectedRoute Comp={OrderOverView}  />} />
+        <Route path="/admin/dashboard" element={<ProtectedRoute Comp={AdminDashboard}  />} />
+        <Route path="/admin/products" element={<ProtectedRoute Comp={ProductList} />} />
+        <Route path="/admin/newProduct" element={<ProtectedRoute Comp={NewProduct} />} />
+        <Route path="/admin/product/:id" element={<ProtectedRoute Comp={AdminProductEdit} />} />
+        <Route path="/admin/orders" element={<ProtectedRoute Comp={AdminOrders}  />} />
+        <Route path="/admin/order/:id" element={<ProcessOrder Comp={AdminAllUser}/>}/>
+        <Route path="/admin/users" element={<ProtectedRoute Comp={AdminAllUser}/>}/>
+        <Route path="/admin/user/:id" element={<ProtectedRoute Comp={AdminUser}/>}/>
+        <Route path="/admin/reviews" element={<ProtectedRoute Comp={ProductReviews}/>}/>
        
       </Routes>
 

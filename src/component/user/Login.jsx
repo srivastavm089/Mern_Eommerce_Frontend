@@ -11,7 +11,7 @@ import Loader from "../Loader";
 export default function Login() {
   const navigate = useNavigate()
   const location = useLocation();
-  console.log(location)
+
   const {error, loading , isAuthenticated } = useSelector((state)=> state.user)
  
   const {
@@ -27,7 +27,7 @@ useEffect(()=>{
 if(error){
  toast.error(error, {
     position: "top-right",
-    autoClose: 5000,
+    autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
