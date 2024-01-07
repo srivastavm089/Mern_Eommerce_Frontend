@@ -87,7 +87,7 @@ const Payment = ({ stripeApiKey }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:8080/api/v1/payment/process",
+        "https://testing-api-i7lh.onrender.com/api/v1/payment/process",
         paymentData,
         {headers:{"Content-Type":"application/json", "token":localStorage.getItem("token")}}
       );
