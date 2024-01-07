@@ -43,14 +43,17 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/login`,
+      `https://testing-api-i7lh.onrender.com/api/v1/login`,
       {
         email,
         password,
       },
-      { withCredentials: true },
-      config
+
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
+
+    const token = data.token;
+
     dispatch({ type: LOGIN_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.response.data.message });
@@ -60,9 +63,14 @@ export const login = (email, password) => async (dispatch) => {
 export const register = (name, email, password, avatar) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
-    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        // token: localStorage.getItem("token"),
+      },
+    };
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/register`,
+      `https://testing-api-i7lh.onrender.com/api/v1/register`,
       {
         name,
         email,
@@ -70,7 +78,7 @@ export const register = (name, email, password, avatar) => async (dispatch) => {
         avatar,
       },
 
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
 
     dispatch({ type: REGISTER_USER_SUCCESS, payload: data });
@@ -83,22 +91,30 @@ export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/me`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.get(
+      `https://testing-api-i7lh.onrender.com/api/v1/me`,
+      {
+        
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+      }
+    );
 
     dispatch({ type: LOAD_USER_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ type: LOAD_USER_FAIL, payload: error.response.data.message });
+    dispatch({ type: LOAD_USER_FAIL, payload: "somethig" });
   }
 };
 export const logout = () => async (dispatch) => {
   try {
     dispatch({ type: LOGOUT_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/logout`, {
-      withCredentials: true,
-    });
+    const { data } = await axios.get(
+      `https://testing-api-i7lh.onrender.com/api/v1/logout`,
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
+    );
 
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
@@ -112,19 +128,16 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 //update Profile
-export const updateUser = (id,userData) => async (dispatch) => {
+export const updateUser = (id, userData) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PROFILE_REQUEST });
-    const config = {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    };
+   
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/admin/user/${id}`,
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/user/${id}`,
       userData,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
-      console.log(data)
+    console.log(data);
     dispatch({ type: UPDATE_PROFILE_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({
@@ -138,14 +151,11 @@ export const updateUser = (id,userData) => async (dispatch) => {
 export const updatePassword = (passwords) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_PASSWORD_REQUEST });
-    const config = {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    };
+  
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/password/update`,
+      `https://testing-api-i7lh.onrender.com/api/v1/password/update`,
       passwords,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
 
     dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.success });
@@ -163,12 +173,12 @@ export const forgotPassword = (email) => async (dispatch) => {
     dispatch({ type: FORGOUT_PASSWORD_REQUEST });
     const config = { headers: { "Content-Type": "application/json" } };
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/password/forgot`,
+      `https://testing-api-i7lh.onrender.com/api/v1/password/forgot`,
       {
         email,
       },
-      { withCredentials: true },
-      config
+      // { withCredentials: true },
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
     dispatch({ type: FORGOUT_PASSWORD_SUCCESS, payload: data.message });
   } catch (error) {
@@ -184,15 +194,15 @@ export const resetPassword =
   (token, password, confirmPassword) => async (dispatch) => {
     try {
       dispatch({ type: RESET_PASSWORD_REQUEST });
-      const config = { headers: { "Content-Type": "application/json" } };
+     
       const { data } = await axios.put(
-        `http://localhost:8080/api/v1/password/reset/${token}`,
+        `https://testing-api-i7lh.onrender.com/api/v1/password/reset/${token}`,
         {
           password,
           confirmPassword,
         },
-        { withCredentials: true },
-        config
+        
+        {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
       );
 
       dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data.success });
@@ -209,10 +219,11 @@ export const getUsers = () => async (dispatch) => {
   try {
     dispatch({ type: ALL_USER_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/admin/users`, {
-      withCredentials: true,
-    });
-    console.log(data)
+    const { data } = await axios.get(
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/users`,
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
+    );
+   
     dispatch({ type: ALL_USER_SUCCESS, payload: data.users });
   } catch (error) {
     dispatch({ type: ALL_USER_FAIL, payload: error.response.data.message });
@@ -221,15 +232,15 @@ export const getUsers = () => async (dispatch) => {
 
 //get user details
 export const getUserDetails = (id) => async (dispatch) => {
-
-  console.log("this")
+  console.log("this");
   try {
     dispatch({ type: USER_DETAIL_REQUEST });
 
-    const { data } = await axios.get(`http://localhost:8080/api/v1/admin/user/${id}`, {
-      withCredentials: true,
-    });
-   console.log(data)
+    const { data } = await axios.get(
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/user/${id}`,
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
+    );
+    console.log(data);
     dispatch({ type: USER_DETAIL_SUCCESS, payload: data.user });
   } catch (error) {
     dispatch({ type: USER_DETAIL_FAIL, payload: error.response.data.message });
@@ -240,14 +251,11 @@ export const getUserDetails = (id) => async (dispatch) => {
 export const updateUserAdmin = (id, userDetails) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_USER_REQUEST });
-    const config = {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    };
+   
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/admin/user/${id}`,
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/user/${id}`,
       userDetails,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
 
     dispatch({ type: UPDATE_USER_SUCCESS, payload: data.success });
@@ -263,14 +271,16 @@ export const updateUserAdmin = (id, userDetails) => async (dispatch) => {
 export const deleteUserAdmin = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_USER_REQUEST });
-    const config = {
-      // headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    };
-    const { data } = await axios.delete(
-      `http://localhost:8080/api/v1/admin/user/${id}`,
 
-      config
+    const { data } = await axios.delete(
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/user/${id}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+      }
     );
 
     dispatch({ type: DELETE_USER_SUCCESS, payload: data });

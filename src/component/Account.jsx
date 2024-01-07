@@ -58,7 +58,7 @@ const Account = () => {
             
          </div>
          <div className="flex flex-col gap-2 w- md:w-96">
-            <Link to="/account/orders" className="rounded flex justify-center items-center bg-gray-600  text-white p-2 hover:bg-gray-700" style={{transition:'all 0.5s '}}>My Orders</Link>
+            <Link to="/orders" className="rounded flex justify-center items-center bg-gray-600  text-white p-2 hover:bg-gray-700" style={{transition:'all 0.5s '}}>My Orders</Link>
             <Link to="/account/update_password" className=" rounded flex justify-center items-center bg-gray-600 text-white  p-2  hover:bg-gray-700" style={{transition:'all 0.5s '}}>Change Password</Link>
          </div>
       </div>

@@ -21,11 +21,13 @@ const FooterComp = () => {
               Stay Connected with us
             </p>
             <div className="mt-6 flex max-w-md gap-x-4">
-              <FaFacebook className="text-white opacity-30 hover:opacity-100 cursor-pointer " />
-              <FaInstagram className="text-white opacity-30 hover:opacity-100 cursor-pointer" />
-              <FaTwitter className="text-white opacity-30 hover:opacity-100 cursor-pointer" />
-              <FaGithub className="text-white opacity-30 hover:opacity-100 cursor-pointer" />
-              <FaYoutube className="text-white opacity-30 hover:opacity-100 cursor-pointer" />
+              <a href="https://www.facebook.com/abhay.srivastav.98229/"> <FaFacebook className="text-white opacity-30 hover:opacity-100 cursor-pointer " /></a>
+             <a href="https://www.instagram.com/srivastavm089/"> <FaInstagram className="text-white opacity-30 hover:opacity-100 cursor-pointer" /></a>
+             <a href="https://twitter.com/abhaysr56566778">  <FaTwitter className="text-white opacity-30 hover:opacity-100 cursor-pointer" /></a>
+            
+              <a href="https://github.com/srivastavm089"><FaGithub className="text-white opacity-30 hover:opacity-100 cursor-pointer" /></a>
+              
+            
             </div>
           </div>
           <dl className="grid grid-cols-2 gap-x-56 gap-y-10 sm:grid-cols-4 lg:pt-2">

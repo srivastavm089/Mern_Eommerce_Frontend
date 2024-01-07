@@ -39,11 +39,11 @@ export const getProduct =
         type: ALL_PRODUCT_REQUEST,
       });
 
-      let link = `http://localhost:8080/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
+      let link = `https://testing-api-i7lh.onrender.com/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`;
 
       if (category) {
         console.log("working");
-        link = `http://localhost:8080/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
+        link = `https://testing-api-i7lh.onrender.com/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
       }
       const { data } = await axios.get(link);
 
@@ -71,7 +71,7 @@ export const getProductDetails = (id) => async (dispatch) => {
       type: PRODUCT_DETAILS_REQUEST,
     });
     const { data } = await axios.get(
-      `http://localhost:8080/api/v1/product/${id}`
+      `https://testing-api-i7lh.onrender.com/api/v1/product/${id}`
     );
 
     dispatch({
@@ -94,10 +94,11 @@ export const getProductAdmin = () => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_PRODUCT_REQUEST });
     const { data } = await axios.get(
-      "http://localhost:8080/api/v1/admin/products",
-      { withCredentials: true }
+      "https://testing-api-i7lh.onrender.com/api/v1/admin/products",
+      {headers:{"Content-Type":"application/json", token:localStorage.getItem("token")}}
+  
     );
-    console.log(data);
+
     dispatch({ type: ADMIN_PRODUCT_SUCCESS, payload: data.products });
   } catch (error) {
     dispatch({ type: ADMIN_PRODUCT_FAIL, payload: "seomthign went " });
@@ -111,14 +112,14 @@ export const newReview = (reviewData) => async (dispatch) => {
     });
     const config = {
       headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     };
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/review`,
+      `https://testing-api-i7lh.onrender.com/api/v1/review`,
       reviewData,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
-    console.log(data);
+
     dispatch({
       type: NEW_REVIEW_SUCCESS,
 
@@ -141,12 +142,12 @@ export const createProduct = (reviewData) => async (dispatch) => {
     });
     const config = {
       headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     };
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/admin/product/new`,
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/product/new`,
       reviewData,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
 
     dispatch({
@@ -170,11 +171,11 @@ export const deleteProd = (id) => async (dispatch) => {
     });
     // const config = {
     //   headers: { "Content-Type": "application/json" },
-    //   withCredentials: true,
+      // withCredentials: true,
     // };
     const { data } = await axios.delete(
-      `http://localhost:8080/api/v1/admin/product/${id}`,
-      { withCredentials: true }
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/product/${id}`,
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
     console.log(data);
     dispatch({
@@ -198,12 +199,12 @@ export const updateProduct = (id, productData) => async (dispatch) => {
     });
     const config = {
       headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     };
     const { data } = await axios.put(
-      `http://localhost:8080/api/v1/admin/product/${id}`,
+      `https://testing-api-i7lh.onrender.com/api/v1/admin/product/${id}`,
       productData,
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
     console.log(data.success);
     dispatch({
@@ -229,12 +230,12 @@ export const getAllReviews = (reviewId, productId) => async (dispatch) => {
     });
     const config = {
       // headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     };
     const { data } = await axios.get(
-      `http://localhost:8080/api/v1/reviews?id=${reviewId}`,
+      `https://testing-api-i7lh.onrender.com/api/v1/reviews?id=${reviewId}`,
 
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
     console.log(data);
     dispatch({
@@ -258,12 +259,12 @@ export const deleteReviews = (reviewId, productId) => async (dispatch) => {
     });
     const config = {
       // headers: { "Content-Type": "application/json" },
-      withCredentials: true,
+      // withCredentials: true,
     };
     const { data } = await axios.delete(
-      `http://localhost:8080/api/v1/reviews?id=${reviewId}&productId=${productId}`,
+      `https://testing-api-i7lh.onrender.com/api/v1/reviews?id=${reviewId}&productId=${productId}`,
 
-      config
+      {headers:{"Content-Type":"application/json" , token:localStorage.getItem("token")}}
     );
     console.log(data.success);
     dispatch({

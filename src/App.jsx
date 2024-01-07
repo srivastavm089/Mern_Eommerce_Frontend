@@ -57,8 +57,9 @@ const App = () => {
   async function getStripeApiKey() {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/stripeapikey",
-        { withCredentials: true }
+        "https://testing-api-i7lh.onrender.com/api/v1/stripeapikey",
+        {headers:{"Content-Type":'application/json', token:localStorage.getItem("token")}}
+        // { withCredentials: true }
       );
 
       // Assuming data.stripeApiKey is the key you want to set
@@ -109,7 +110,7 @@ const App = () => {
         <Route path="/admin/users" element={<AdminAllUser/>}/>
         <Route path="/admin/user/:id" element={<AdminUser/>}/>
         <Route path="/admin/reviews" element={<ProductReviews/>}/>
-        <Route path="/*" element={<NotFound/>}/>
+       
       </Routes>
 
       {stripeApiKey && (
@@ -120,6 +121,7 @@ const App = () => {
               path="/order/payment"
               element={<Payment stripeApiKey={stripeApiKey} />}
             />
+             {/* <Route path="/*" element={<NotFound/>}/> */}
           </Routes>
         </Elements>
       )}
