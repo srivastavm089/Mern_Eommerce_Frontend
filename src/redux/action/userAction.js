@@ -43,7 +43,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: LOGIN_REQUEST });
 
     const { data } = await axios.post(
-      `http://localhost:8080/api/v1/login`,
+      `https://testing-api-i7lh.onrender.com/api/v1/login`,
       {
         email,
         password,
